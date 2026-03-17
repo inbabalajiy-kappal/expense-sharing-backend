@@ -1,11 +1,11 @@
-from .equal_split import EqualSplitStrategy
+from decimal import Decimal
+from expenses.services.strategies.split_strategy import SplitStrategy
 
 
-class StrategyFactory:
+class PercentSplitStrategy(SplitStrategy):
 
-    @staticmethod
-    def get_strategy(split_type):
-        if split_type == "EQUAL":
-            return EqualSplitStrategy()
-
-        raise Exception("Invalid split type")
+    def calculate(self, amount, participants, metadata):
+        return {
+            user: Decimal(amount) * Decimal(percent) / 100
+            for user, percent in zip(participants, metadata)
+        }

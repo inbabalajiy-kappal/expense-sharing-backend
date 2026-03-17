@@ -4,5 +4,5 @@ from abc import ABC, abstractmethod
 class SplitStrategy(ABC):
 
     @abstractmethod
-    def calculate(self, amount, participants):
+    def calculate(self, amount, participants, metadata=None):
         pass

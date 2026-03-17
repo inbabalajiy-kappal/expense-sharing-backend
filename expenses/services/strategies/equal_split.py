@@ -1,12 +1,15 @@
-class EqualSplitStrategy:
+from decimal import Decimal
+from expenses.services.strategies.split_strategy import SplitStrategy
 
-    def split(self, amount, participants):
-        count = len(participants)
-        share = amount / count
 
-        result = {}
+class EqualSplitStrategy(SplitStrategy):
 
-        for user in participants:
-            result[user] = share
+    def calculate(self, amount, participants, metadata=None):
+        share = round(Decimal(amount) / len(participants), 2)
 
-        return result
+        return dict(
+            zip(
+                participants,
+                [share] * len(participants)
+            )
+        )

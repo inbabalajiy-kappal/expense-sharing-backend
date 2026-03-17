@@ -1,21 +1,10 @@
-from expenses.models import Balance
-def test_add_expense(self):
-    # Arrange: Set up test data
-    payer = self.alice
-    participants = [self.alice.id, self.bob.id, self.charlie.id]
-    amount = 3000
+from expenses.services.strategies.equal_split import EqualSplitStrategy
 
-    expense = self.service.add_expense(
-        payer_id=payer.id,
-        amount=amount,
-        participants=participants
-    )
 
-    self.assertEqual(expense.amount, 3000)
-    self.assertEqual(expense.payer, self.alice)
+def test_equal_split():
 
-    balance_bob = Balance.objects.get(debtor=self.bob, creditor=self.alice)
-    balance_charlie = Balance.objects.get(debtor=self.charlie, creditor=self.alice)
+    strategy = EqualSplitStrategy()
 
-    self.assertEqual(balance_bob.amount, 1000)
-    self.assertEqual(balance_charlie.amount, 1000)
+    result = strategy.calculate(300, [1, 2, 3])
+
+    assert list(result.values()) == [100, 100, 100]
