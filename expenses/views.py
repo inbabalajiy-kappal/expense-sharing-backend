@@ -8,7 +8,10 @@ from expenses.services.expense_service import ExpenseService
 
 class ExpenseListCreateView(APIView):
 
-    service = ExpenseService()
+    def __init__(self, service=None, **kwargs):
+
+        super().__init__(**kwargs)
+        self.service = service or ExpenseService()
 
     def get(self, request):
 
@@ -33,7 +36,10 @@ class ExpenseListCreateView(APIView):
 
 class BalanceListView(APIView):
 
-    service = ExpenseService()
+    def __init__(self, service=None, **kwargs):
+
+        super().__init__(**kwargs)
+        self.service = service or ExpenseService()
 
     def get(self, request):
 

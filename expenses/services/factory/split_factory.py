@@ -13,4 +13,10 @@ class SplitFactory:
 
     @classmethod
     def create(cls, split_type):
-        return cls._types[split_type]()
+        try:
+            return cls._types[split_type]()
+        except KeyError as exc:
+            raise ValueError(f"Unsupported split type: {split_type}") from exc
+
+
+SplitStrategyFactory = SplitFactory

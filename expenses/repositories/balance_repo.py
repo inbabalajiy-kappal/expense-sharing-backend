@@ -1,16 +1,21 @@
+from decimal import Decimal
+
 from expenses.models import Balance
 
 
 class BalanceRepository:
 
-    @staticmethod
-    def update_balance(debtor, creditor, amount):
+    def update_balance(self, debtor, creditor, amount):
 
-        balance, created = Balance.objects.get_or_create(
-            from_user=debtor,
-            to_user=creditor,
-            defaults={"amount": 0},
+        balance, _ = Balance.objects.get_or_create(
+            debtor=debtor,
+            creditor=creditor,
+            defaults={"amount": Decimal("0.00")},
         )
 
-        balance.amount += amount
+        balance.amount += Decimal(amount)
         balance.save()
+
+    def get_all(self):
+
+        return Balance.objects.all()

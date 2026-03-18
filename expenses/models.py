@@ -13,6 +13,8 @@ class User(models.Model):
 class Expense(models.Model):
     SPLIT_CHOICES = [
         ("EQUAL", "Equal"),
+        ("EXACT", "Exact"),
+        ("PERCENT", "Percent"),
     ]
 
     payer = models.ForeignKey(
@@ -21,7 +23,7 @@ class Expense(models.Model):
         related_name="paid_expenses"
     )
 
-    amount = models.FloatField()
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
     split_type = models.CharField(
         max_length=20,
         choices=SPLIT_CHOICES,
@@ -41,30 +43,10 @@ class ExpenseParticipant(models.Model):
         related_name="participants"
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    share = models.FloatField()
+    share = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
         return f"{self.user.name} owes {self.share}"
-
-
-class Balance(models.Model):
-    debtor = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name="debts"
-    )
-    creditor = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name="credits"
-    )
-    amount = models.FloatField(default=0)
-
-    class Meta:
-        unique_together = ("debtor", "creditor")
-
-    def __str__(self):
-        return f"{self.debtor.name} owes {self.creditor.name} {self.amount}"
 
 
 class Balance(models.Model):
